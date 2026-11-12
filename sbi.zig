@@ -3028,13 +3028,13 @@ const ErrorCode = enum(isize) {
     IO = -13,
 
     inline fn toError(self: ErrorCode, comptime ErrorT: type) ErrorT {
-        const errors: []const std.builtin.Type.Error = @typeInfo(ErrorT).error_set.?;
-        inline for (errors) |err| {
-            if (comptime std.mem.eql(u8, err.name, "Success")) {
+        const errors = @typeInfo(ErrorT).error_set;
+        inline for (errors.error_names.?) |err| {
+            if (comptime std.mem.eql(u8, err, "Success")) {
                 @compileError("Success is not an error");
             }
 
-            if (self == @field(ErrorCode, err.name)) return @field(ErrorT, err.name);
+            if (self == @field(ErrorCode, err)) return @field(ErrorT, err);
         }
         unreachable;
     }
