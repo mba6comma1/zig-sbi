@@ -6,7 +6,6 @@ pub fn build(b: *std.Build) void {
         .root_source_file = b.path("sbi.zig"),
     });
 
-    b.enable_qemu = true;
     const test_step = b.step("test", "Run library tests");
 
     inline for (targets) |target| {
